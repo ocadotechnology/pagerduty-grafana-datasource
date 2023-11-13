@@ -1,0 +1,40 @@
+{
+    "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
+    "type": "datasource",
+    "name": "PagerDuty",
+    "id": "ocado-pagerduty-datasource",
+    "annotations": true,
+    "info": {
+        "description": "Annotation datasource plugin for PagerDuty incidents",
+        "author": {
+            "name": "Ocado Technology"
+        },
+        "keywords": [
+            "datasource"
+        ],
+        "logos": {
+            "small": "img/pagerduty.svg",
+            "large": "img/pagerduty.svg"
+        },
+        "links": [],
+        "screenshots": [],
+        "version": "%VERSION%",
+        "updated": "%TODAY%"
+    },
+    "routes": [
+        {
+            "path": "pagerduty",
+            "url": "https://api.pagerduty.com",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "content": "Token token={{ .SecureJsonData.apiKey }}"
+                }
+            ]
+        }
+    ],
+    "dependencies": {
+        "grafanaDependency": ">=10.0.3",
+        "plugins": []
+    }
+}
