@@ -34,7 +34,7 @@ export interface Incident {
     created_at: string;
     resolved_at: string;
     title?: string;
-    description?: string;
+    summary?: string;
     incident_key?: string;
 }
 

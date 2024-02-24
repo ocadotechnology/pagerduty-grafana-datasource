@@ -36,9 +36,9 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
                 refId: target.refId,
                 fields: [
                     { name: 'time', type: FieldType.time },
-                    { name: 'timeEnd', type: FieldType.string },
-                    { name: 'text', type: FieldType.string },
+                    { name: 'timeEnd', type: FieldType.time },
                     { name: 'title', type: FieldType.string },
+                    { name: 'text', type: FieldType.string },
                     { name: 'id', type: FieldType.string },
                 ],
             });
@@ -50,7 +50,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
                         const createdAt = timestamp.getTime()
                         const resolvedAt = timestamp_end.getTime();
                         const title = incident.title;
-                        const text = incident.description;
+                        const text = incident.summary;
                         const id = incident.incident_key;
 
                         frame.appendRow([createdAt, resolvedAt, title, text, id]);
@@ -82,8 +82,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     async testDatasource() {
         // Implement a health check for your data source.
         try {
-            const testQuery = {serviceId: "", refId: ""}
-            const response = await this.doRequest(testQuery, "","");
+            const testQuery = { serviceId: "", refId: "" }
+            const response = await this.doRequest(testQuery, "", "");
             if (response.status === 200) {
                 return {
                     status: 'success',
