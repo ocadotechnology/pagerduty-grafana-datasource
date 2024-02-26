@@ -28,7 +28,6 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const to = range!.to.toISOString();
 
     const promises = options.targets.map(async (target) => {
-      const response = this.doRequest(target, from, to);
       const frame = new MutableDataFrame({
         refId: target.refId,
         fields: [
@@ -39,18 +38,18 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           { name: 'id', type: FieldType.string },
         ],
       });
-      await response.then((response) => {
-        response.data.incidents.forEach((incident: Incident) => {
-          const timestamp: Date = new Date(incident.created_at);
-          const timestamp_end: Date = new Date(incident.resolved_at);
-          const createdAt = timestamp.getTime();
-          const resolvedAt = timestamp_end.getTime();
-          const title = incident.title;
-          const text = incident.summary;
-          const id = incident.incident_key;
+      const response = await this.doRequestPaginated(target, from, to, 25);
 
-          frame.appendRow([createdAt, resolvedAt, title, text, id]);
-        });
+      response.incidents.forEach((incident: Incident) => {
+        const timestamp: Date = new Date(incident.created_at);
+        const timestamp_end: Date = new Date(incident.resolved_at);
+        const createdAt = timestamp.getTime();
+        const resolvedAt = timestamp_end.getTime();
+        const title = incident.title;
+        const text = incident.summary;
+        const id = incident.incident_key;
+
+        frame.appendRow([createdAt, resolvedAt, title, text, id]);
       });
       return frame;
     });
@@ -58,7 +57,26 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     return Promise.all(promises).then((data) => ({ data: data }));
   }
 
-  async doRequest(query: MyQuery, from: string, to: string): Promise<FetchResponse<ListIncidentsResponse>> {
+  async doRequestPaginated(query: MyQuery, from: string, to: string, pageSize: number): Promise<ListIncidentsResponse> {
+    let listIncidentReponse: ListIncidentsResponse = { incidents: [], more: false };
+
+    let pageNumber = 0;
+    do {
+      const response = await this.doRequest(query, from, to, pageSize, pageNumber);
+      listIncidentReponse.incidents = Array.prototype.concat(listIncidentReponse.incidents, response.data.incidents);
+      listIncidentReponse.more = response.data.more;
+      pageNumber++;
+    } while (listIncidentReponse.more);
+    return listIncidentReponse;
+  }
+
+  async doRequest(
+    query: MyQuery,
+    from: string,
+    to: string,
+    pageSize: number,
+    pageNumber: number
+  ): Promise<FetchResponse<ListIncidentsResponse>> {
     const routePath = '/pagerduty';
 
     const result = getBackendSrv().fetch<ListIncidentsResponse>({
@@ -68,6 +86,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         'service_ids[]': query.serviceId === '' ? [] : [query.serviceId],
         since: from,
         until: to,
+        limit: pageSize,
+        offset: pageNumber * pageSize,
       },
       responseType: 'json',
     });
@@ -79,7 +99,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     // Implement a health check for your data source.
     try {
       const testQuery = { serviceId: '', refId: '' };
-      const response = await this.doRequest(testQuery, '', '');
+      const response = await this.doRequest(testQuery, '', '', 25, 0);
       if (response.status === 200) {
         return {
           status: 'success',
