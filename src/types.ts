@@ -24,6 +24,7 @@ export interface MySecureJsonData {
  */
 export interface ListIncidentsResponse {
   incidents: Incident[];
+  more: boolean;
 }
 
 /**
