@@ -1,40 +1,38 @@
 import { DataQuery, DataSourceJsonData } from '@grafana/schema';
 
 export interface MyQuery extends DataQuery {
-    serviceId: string;
+  serviceId: string;
 }
 
 /**
  * These are options configured for each DataSource instance
  */
-export interface MyDataSourceOptions extends DataSourceJsonData {
-}
+export interface MyDataSourceOptions extends DataSourceJsonData {}
 
 export const DEFAULT_QUERY: Partial<MyQuery> = {
-  serviceId: "",
+  serviceId: '',
 };
 /**
  * Value that is used in the backend, but never sent over HTTP to the frontend
  */
 export interface MySecureJsonData {
-    apiKey?: string;
+  apiKey?: string;
 }
 
 /**
  * Value that is used in the backend, but never sent over HTTP to the frontend
  */
 export interface ListIncidentsResponse {
-    incidents: Incident[]
+  incidents: Incident[];
 }
 
 /**
  * Value that is used in the backend, but never sent over HTTP to the frontend
  */
 export interface Incident {
-    created_at: string;
-    resolved_at: string;
-    title?: string;
-    summary?: string;
-    incident_key?: string;
+  created_at: string;
+  resolved_at: string;
+  title?: string;
+  summary?: string;
+  incident_key?: string;
 }
-
