@@ -42,7 +42,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
       response.incidents.forEach((incident: Incident) => {
         const timestamp: Date = new Date(incident.created_at);
-        const timestamp_end: Date = new Date(incident.resolved_at);
+        const timestamp_end: Date = incident.resolved_at !== null ? new Date(incident.resolved_at) : new Date(to);
         const createdAt = timestamp.getTime();
         const resolvedAt = timestamp_end.getTime();
         const title = incident.title;
