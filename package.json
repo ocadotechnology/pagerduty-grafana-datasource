@@ -1,6 +1,6 @@
 {
   "name": "pagerduty",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Annotation datasource plugin for PagerDuty incidents",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
