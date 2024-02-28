@@ -12,6 +12,7 @@ jobs:
       # usage of GRAFANA_API_KEY is deprecated
       # GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
       GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+      ROOT_URLS: ${{ secrets.ROOT_URLS }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup Node.js environment
@@ -60,7 +61,7 @@ jobs:
         if: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN == '' }}
 
       - name: Sign plugin
-        run: npm run sign
+        run: npm run sign -- --rootUrls ${ROOT_URLS}
         if: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN != '' }}
 
       - name: Get plugin metadata

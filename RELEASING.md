@@ -15,8 +15,9 @@ Before signing a plugin for the first time please consult the Grafana [plugin si
 1. Create a [Grafana Cloud account](https://grafana.com/signup).
 2. Make sure that the first part of the plugin ID matches the slug of your Grafana Cloud account.
    - _You can find the plugin ID in the `plugin.json` file inside your plugin directory. For example, if your account slug is `acmecorp`, you need to prefix the plugin ID with `acmecorp-`._
-3. Create a Grafana Cloud API key with the `PluginPublisher` role.
-4. Keep a record of this API key as it will be required for signing a plugin.
+3. Create a Grafana Cloud Access policy with the `plugins:write` scope.
+4. Create an Access Token for this Access policy
+5. Keep a record of this token as it will be required for signing a plugin.
 
 ## Signing a plugin
 
@@ -26,8 +27,8 @@ If the plugin is using the GitHub actions supplied with `@grafana/create-plugin`
 
 1. Please navigate to "settings > secrets > actions" within your repo to create secrets.
 2. Click "New repository secret"
-3. Name the secret "GRAFANA_API_KEY"
-4. Paste your Grafana Cloud API key in the Secret field
+3. Name the secret "GRAFANA_ACCESS_POLICY_TOKEN"
+4. Paste your Grafana Cloud Access token in the Secret field
 5. Click "Add secret"
 
 #### Push a version tag
