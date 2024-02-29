@@ -17,7 +17,16 @@
             "large": "img/pagerduty.svg"
         },
         "links": [],
-        "screenshots": [],
+        "screenshots": [
+            {
+                "name": "Annotation visual example",
+                "path": "img/screenshots/example.png"
+            },
+            {
+                "name": "Query configuration example",
+                "path": "img/screenshots/query.png"
+            }
+        ],
         "version": "%VERSION%",
         "updated": "%TODAY%"
     },
